@@ -20,7 +20,7 @@ class ThemesCatalog {
         ),
       );
 
-  ThemeData get lightTheme => ThemeData(
+  ThemeData get lightTheme => ThemeData(  
         scaffoldBackgroundColor: const Color.fromRGBO(235, 235, 235, 1),
         appBarTheme: const AppBarTheme(
           backgroundColor: Color.fromRGBO(245, 245, 245, 1),

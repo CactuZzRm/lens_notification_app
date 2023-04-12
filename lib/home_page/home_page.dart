@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lens_notification_app/providers/theme_state_provider.dart';
 import 'package:lens_notification_app/providers/timer_state_provider.dart';
+import 'package:lens_notification_app/themes/themes.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -14,8 +16,9 @@ class HomePage extends ConsumerStatefulWidget {
 class _HomePageState extends ConsumerState<HomePage> {
   bool isFullDate = true;
 
-  void setNewEndDate(WidgetRef ref, Duration leftTime) {
-    ref.read(timerStateProvider.notifier).update((state) => DateTime.now().add(leftTime));
+  void setNewEndDate(WidgetRef ref, DateTime newDate) {
+    // ref.read(timerStateProvider.notifier).update((state) => DateTime.now().add(leftTime));
+    ref.read(timerStateProvider.notifier).update((state) => newDate);
   }
 
   @override
@@ -124,7 +127,35 @@ class _HomePageState extends ConsumerState<HomePage> {
                 ),
                 child: ElevatedButton(
                   onPressed: () {
-                    setNewEndDate(ref, const Duration(days: 2));
+                    showCupertinoModalPopup(
+                      context: context,
+                      builder: (context) => Container(
+                        height: deviceSize.height * 0.25,
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Color.fromRGBO(71, 56, 242, 1), Color.fromRGBO(123, 68, 243, 1)],
+                          ),
+                        ),
+                        child: CupertinoTheme(
+                          data: CupertinoThemeData(
+                            brightness: Brightness.dark,
+                            textTheme: CupertinoTextThemeData(
+                              dateTimePickerTextStyle: TextStyle(
+                                color: ThemesCatalog().darkTheme.textTheme.bodyLarge!.color,
+                                fontSize: 24,
+                              ),
+                            ),
+                          ),
+                          child: CupertinoDatePicker(
+                            mode: CupertinoDatePickerMode.date,
+                            initialDateTime: endDate ?? DateTime.now(),
+                            onDateTimeChanged: (DateTime newDateTime) {
+                              setNewEndDate(ref, newDateTime);
+                            },
+                          ),
+                        ),
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     // 71, 56, 242 Левая сторона градиента
