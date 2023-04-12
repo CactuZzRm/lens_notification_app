@@ -53,10 +53,15 @@ class _HomePageState extends ConsumerState<HomePage> {
                   ),
                 ),
                 secondChild: InkWell(
-                  borderRadius: BorderRadius.circular(15),
                   onTap: () => setState(() {
                     isFullDate = !isFullDate;
                   }),
+                  onLongPress: () {
+                    // Какое-нибудь пояснение
+                    // Наверное flush-bar
+                  },
+                  splashColor: const Color.fromRGBO(55, 36, 150, 0.3), // расплывающийся при нажатии на фоне цвет
+                  highlightColor: const Color.fromRGBO(255, 255, 255, 0.1), // Цвет блика
                   child: AnimatedCrossFade(
                     firstChild: Column(
                       children: [
@@ -69,7 +74,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          DateFormat('dd-MM-yyyy').format(endDate ?? DateTime.now()),
+                          DateFormat('dd.MM.yyyy').format(endDate ?? DateTime.now()),
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             fontSize: 22,
@@ -88,7 +93,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          endDate != null ? endDate.difference(DateTime.now()).inDays.toString() : 'Что-то пошло не так',
+                          endDate != null
+                              ? endDate.difference(DateTime.now()).inDays.toString()
+                              : 'Что-то пошло не так',
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             fontSize: 22,
@@ -101,7 +108,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   ),
                 ),
                 crossFadeState: endDate == null ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-                duration: const Duration(milliseconds: 220),
+                duration: const Duration(milliseconds: 150),
               ),
               Container(
                 width: deviceSize.width * 0.35,
@@ -129,10 +136,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                       deviceSize.height * 0.35,
                     ),
                   ),
-                  child: const Text(
-                    'Установить таймер',
+                  child: Text(
+                    endDate == null ? 'Установить таймер' : 'Изменить дату',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18,
                     ),
                   ),
