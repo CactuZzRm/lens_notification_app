@@ -44,88 +44,65 @@ class _HomePageState extends ConsumerState<HomePage> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              endDate != null
-                  ? InkWell(
-                      borderRadius: BorderRadius.circular(15),
-                      onTap: () => setState(() {
-                        isFullDate = !isFullDate;
-                      }),
-                      child: AnimatedCrossFade(
-                        firstChild: Column(
-                          children: [
-                            const Text(
-                              'Следующая замена линз:',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 18,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              DateFormat('dd-MM-yyyy').format(endDate),
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                fontSize: 22,
-                              ),
-                            ),
-                          ],
+              AnimatedCrossFade(
+                firstChild: const Text(
+                  'Дата не установлена',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
+                secondChild: InkWell(
+                  borderRadius: BorderRadius.circular(15),
+                  onTap: () => setState(() {
+                    isFullDate = !isFullDate;
+                  }),
+                  child: AnimatedCrossFade(
+                    firstChild: Column(
+                      children: [
+                        const Text(
+                          'Следующая замена линз:',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
                         ),
-                        secondChild: Column(
-                          children: [
-                            const Text(
-                              'Следующая замена линз:',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 18,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              endDate.difference(DateTime.now()).inDays.toString(),
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                fontSize: 22,
-                              ),
-                            ),
-                          ],
+                        const SizedBox(height: 4),
+                        Text(
+                          DateFormat('dd-MM-yyyy').format(endDate ?? DateTime.now()),
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 22,
+                          ),
                         ),
-                        crossFadeState: isFullDate ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-                        duration: const Duration(milliseconds: 220),
-                        // child: SizedBox(
-                        //   width: deviceSize.width * 0.6,
-                        //   child: ListView(
-                        //     physics: const NeverScrollableScrollPhysics(),
-                        //     shrinkWrap: true,
-                        //     children: [
-                        //       const Text(
-                        //         'Следующая замена линз:',
-                        //         textAlign: TextAlign.center,
-                        //         style: TextStyle(
-                        //           fontSize: 18,
-                        //         ),
-                        //       ),
-                        //       const SizedBox(height: 8),
-                        //       Text(
-                        //         isFullDate
-                        //             ? DateFormat('dd-MM-yyyy').format(endDate)
-                        //             : endDate.difference(DateTime.now()).inDays.toString(),
-                        //         textAlign: TextAlign.center,
-                        //         style: const TextStyle(
-                        //           fontSize: 22,
-                        //         ),
-                        //       )
-                        //     ],
-                        //   ),
-                        // ),
-                      ),
-                    )
-                  : const Text(
-                      'Дата не установлена',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
+                      ],
                     ),
+                    secondChild: Column(
+                      children: [
+                        const Text(
+                          'Следующая замена линз:',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          endDate != null ? endDate.difference(DateTime.now()).inDays.toString() : 'Что-то пошло не так',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 22,
+                          ),
+                        ),
+                      ],
+                    ),
+                    crossFadeState: isFullDate ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+                    duration: const Duration(milliseconds: 220),
+                  ),
+                ),
+                crossFadeState: endDate == null ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+                duration: const Duration(milliseconds: 220),
+              ),
               Container(
                 width: deviceSize.width * 0.35,
                 height: deviceSize.height * 0.35,
@@ -140,7 +117,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 ),
                 child: ElevatedButton(
                   onPressed: () {
-                    setNewEndDate(ref, Duration(days: 2));
+                    setNewEndDate(ref, const Duration(days: 2));
                   },
                   style: ElevatedButton.styleFrom(
                     // 71, 56, 242 Левая сторона градиента
