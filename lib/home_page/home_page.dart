@@ -6,6 +6,8 @@ import 'package:lens_notification_app/providers/theme_state_provider.dart';
 import 'package:lens_notification_app/providers/timer_state_provider.dart';
 import 'package:lens_notification_app/themes/themes.dart';
 
+import '../providers/shared_preferences_provider.dart';
+
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
@@ -13,17 +15,19 @@ class HomePage extends ConsumerStatefulWidget {
   ConsumerState<HomePage> createState() => _HomePageState();
 }
 
+const String endDateSharedKey = 'endDateKey';
+const String darkThemeSharedKey = 'darkThemeKey';
+
 class _HomePageState extends ConsumerState<HomePage> {
   bool isFullDate = true;
 
   void setNewEndDate(WidgetRef ref, DateTime newDate) {
-    // ref.read(timerStateProvider.notifier).update((state) => DateTime.now().add(leftTime));
-    ref.read(timerStateProvider.notifier).update((state) => newDate);
+    ref.read(timerStateProvider.notifier).newState(newDate.toString());
   }
 
   @override
   Widget build(BuildContext context) {
-    final endDate = ref.watch(timerStateProvider);
+    final endDate = ref.watch(timerStateProvider) != '' ? DateTime.parse(ref.watch(timerStateProvider)) : null;
     final Size deviceSize = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
@@ -31,7 +35,9 @@ class _HomePageState extends ConsumerState<HomePage> {
           actions: [
             IconButton(
               onPressed: () {
-                ref.read(themeStateProvider.notifier).update((state) => !state);
+                // ref.read(themeStateProvider.notifier).update((state) => !state);
+                //ref.read(themeStateProvider)
+                ref.read(themeStateProvider.notifier).newState();
               },
               icon: Icon(
                 !ref.watch(themeStateProvider) ? Icons.nightlight : Icons.sunny,
