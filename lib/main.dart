@@ -5,7 +5,8 @@ import 'package:lens_notification_app/providers/theme_state_provider.dart';
 import 'package:lens_notification_app/providers/timer_state_provider.dart';
 import 'package:lens_notification_app/themes/themes.dart';
 
-import 'home_page/home_page.dart';
+import 'pages/debug_page/debug_page.dart';
+import 'pages/home_page/home_page.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -20,7 +21,8 @@ class MyApp extends ConsumerWidget {
     return FutureBuilder(
       future: Future.wait([
         ref.watch(themeStateProvider.notifier).init(),
-        ref.watch(timerStateProvider.notifier).init(),
+        ref.watch(endDateProvider.notifier).init(),
+        ref.watch(fullDateProvider.notifier).init(),        
       ]),
       builder: ((context, snapshot) {
         return MaterialApp(
